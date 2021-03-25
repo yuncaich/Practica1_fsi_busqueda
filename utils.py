@@ -4,6 +4,7 @@
 
 infinity = 1.0e400
 
+import math
 
 def Dict(**entries):
     """Create a dict out of the argument=value arguments.
@@ -543,6 +544,44 @@ class FIFOQueue(Queue):
             self.start = 0
         return e
 
+class ramificacion_acotacion(Queue):
+
+    def __init__(self):
+        self.A = []
+        self.start = 0
+
+    def append(self, item):
+        self.A.append(item)
+
+    def __len__(self):
+        return len(self.A) - self.start
+
+    def extend(self, items):
+        self.A.extend(items)
+        self.A.sort(key=lambda x: -x.path_cost)
+
+    def pop(self):
+        return self.A.pop()
+
+class H_ramificacion_acotacion(Queue):
+
+    def __init__(self,problem):
+        self.A = []
+        self.start = 0
+        self.problem = problem
+
+    def append(self, item):
+        self.A.append(item)
+
+    def __len__(self):
+        return len(self.A) - self.start
+
+    def extend(self, items):
+        self.A.extend(items)
+        self.A.sort(key=lambda node: node.path_cost + self.problem.h(node), reverse=True)
+
+    def pop(self):
+        return self.A.pop()
 
 
 ## Fig: The idea is we can define things like Fig[3,10] later.
